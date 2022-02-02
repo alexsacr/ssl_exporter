@@ -33,7 +33,18 @@ vet:
 
 build:
 	@echo ">> building binary"
-	@CGO_ENABLED=0 go build -v \
+	@CGO_ENABLED=0  go build -v \
+		-ldflags "-X github.com/prometheus/common/version.Version=dev \
+		-X github.com/prometheus/common/version.Revision=$(shell git rev-parse HEAD) \
+		-X github.com/prometheus/common/version.Branch=$(APP_BRANCH) \
+		-X github.com/prometheus/common/version.BuildUser=$(APP_USER)@$(APP_HOST) \
+		-X github.com/prometheus/common/version.BuildDate=$(shell date '+%Y%m%d-%H:%M:%S') \
+		" \
+		-o $(BIN_NAME) .
+
+build-linux:
+	@echo ">> building binary"
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v \
 		-ldflags "-X github.com/prometheus/common/version.Version=dev \
 		-X github.com/prometheus/common/version.Revision=$(shell git rev-parse HEAD) \
 		-X github.com/prometheus/common/version.Branch=$(APP_BRANCH) \
