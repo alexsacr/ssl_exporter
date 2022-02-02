@@ -35,6 +35,10 @@ var (
 			"kubeconfig": Module{
 				Prober: "kubeconfig",
 			},
+			"smtps": Module{
+				Prober: "tcp",
+				TCP:    TCPProbe{StartTLS: "smtp"},
+			},
 		},
 	}
 )
